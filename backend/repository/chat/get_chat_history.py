@@ -14,10 +14,11 @@ def get_chat_history(chat_id: str) -> List[ChatHistory]:
         .order("message_time", desc=False)  # Add the ORDER BY clause
         .execute()
     ).data
-    if history is None:
-        return []
-    else:
-        return [
+    return (
+        []
+        if history is None
+        else [
             ChatHistory(message)  # pyright: ignore reportPrivateUsage=none
             for message in history
         ]
+    )

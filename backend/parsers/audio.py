@@ -24,9 +24,6 @@ async def process_audio(
 
     # use this for whisper
     os.environ.get("OPENAI_API_KEY")
-    if user_openai_api_key:
-        pass
-
     try:
         upload_file = file.file
         with tempfile.NamedTemporaryFile(

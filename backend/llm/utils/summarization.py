@@ -99,9 +99,8 @@ Summary
             "summary_id": summary_id,
             "document_id": document_id,
         }
-    return [
-        e
-        for e in sorted(
+    return list(
+        sorted(
             evaluations.values(), key=lambda x: x["evaluation"], reverse=True
         )
-    ]
+    )

@@ -34,9 +34,7 @@ class Brain(BaseModel):
     @property
     def brain_size(self):
         self.get_unique_brain_files()
-        current_brain_size = sum(float(doc["size"]) for doc in self.files)
-
-        return current_brain_size
+        return sum(float(doc["size"]) for doc in self.files)
 
     @property
     def remaining_brain_size(self):
@@ -71,9 +69,7 @@ class Brain(BaseModel):
             .filter("brain_id", "eq", self.id)
             .execute()
         )
-        if len(response.data) == 0:
-            return None
-        return response.data[0]
+        return None if len(response.data) == 0 else response.data[0]
 
     def get_brain_details(self):
         response = (
@@ -95,30 +91,29 @@ class Brain(BaseModel):
         )
         if len(results.data) == 0:
             return {"message": "You are not the owner of this brain."}
-        else:
-            results = (
-                self.commons["supabase"]
-                .table("brains_vectors")
-                .delete()
-                .match({"brain_id": self.id})
-                .execute()
-            )
+        results = (
+            self.commons["supabase"]
+            .table("brains_vectors")
+            .delete()
+            .match({"brain_id": self.id})
+            .execute()
+        )
 
-            results = (
-                self.commons["supabase"]
-                .table("brains_users")
-                .delete()
-                .match({"brain_id": self.id})
-                .execute()
-            )
+        results = (
+            self.commons["supabase"]
+            .table("brains_users")
+            .delete()
+            .match({"brain_id": self.id})
+            .execute()
+        )
 
-            results = (
-                self.commons["supabase"]
-                .table("brains")
-                .delete()
-                .match({"brain_id": self.id})
-                .execute()
-            )
+        results = (
+            self.commons["supabase"]
+            .table("brains")
+            .delete()
+            .match({"brain_id": self.id})
+            .execute()
+        )
 
     def create_brain(self):
         commons = common_dependencies()
@@ -199,7 +194,7 @@ class Brain(BaseModel):
 
         vector_ids = [item["vector_id"] for item in response.data]
 
-        if len(vector_ids) == 0:
+        if not vector_ids:
             return []
 
         self.files = get_unique_files_from_vector_ids(vector_ids)

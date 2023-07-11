@@ -50,18 +50,17 @@ async def upload_file(
     file_size = get_file_size(uploadFile)
 
     file = File(file=uploadFile)
-    if remaining_free_space - file_size < 0:
-        message = {
+    return (
+        {
             "message": f"❌ User's brain will exceed maximum capacity with this upload. Maximum file allowed is : {convert_bytes(remaining_free_space)}",
             "type": "error",
         }
-    else:
-        message = await filter_file(
+        if remaining_free_space - file_size < 0
+        else await filter_file(
             commons,
             file,
             enable_summarization,
             brain_id=brain_id,
             openai_api_key=request.headers.get("Openai-Api-Key", None),
         )
-
-    return message
+    )

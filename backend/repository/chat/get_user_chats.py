@@ -13,5 +13,4 @@ def get_user_chats(user_id: str) -> List[Chat]:
         .filter("user_id", "eq", user_id)
         .execute()
     )
-    chats = [Chat(chat_dict) for chat_dict in response.data]
-    return chats
+    return [Chat(chat_dict) for chat_dict in response.data]

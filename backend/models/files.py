@@ -120,10 +120,7 @@ class File(BaseModel):
         )
 
         # if the file does not exist in vectors then no need to go check in brains_vectors
-        if len(self.vectors_ids) == 0:  # pyright: ignore reportPrivateUsage=none
-            return False
-
-        return True
+        return len(self.vectors_ids) != 0
 
     def file_already_exists_in_brain(self, brain_id):
         """
@@ -144,10 +141,7 @@ class File(BaseModel):
             .execute()
         )
         print("response.data", response.data)
-        if len(response.data) == 0:
-            return False
-
-        return True
+        return len(response.data) != 0
 
     def file_is_empty(self):
         """

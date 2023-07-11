@@ -52,6 +52,4 @@ class CustomSupabaseVectorStore(SupabaseVectorStore):
             if search.get("content")
         ]
 
-        documents = [doc for doc, _ in match_result]
-
-        return documents
+        return [doc for doc, _ in match_result]
