@@ -15,10 +15,7 @@ def process_html(commons: CommonsDep, file: File, enable_summarization, brain_id
 
 def get_html(url):
     response = requests.get(url)
-    if response.status_code == 200:
-        return response.text
-    else:
-        return None
+    return response.text if response.status_code == 200 else None
 
 
 def slugify(text):

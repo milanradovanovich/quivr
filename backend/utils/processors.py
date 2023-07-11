@@ -50,9 +50,7 @@ async def filter_file(
 
     print("file sha1", file.file_sha1)
     file_exists = file.file_already_exists()
-    file_exists_in_brain = file.file_already_exists_in_brain(brain_id)
-
-    if file_exists_in_brain:
+    if file_exists_in_brain := file.file_already_exists_in_brain(brain_id):
         return create_response(
             f"🤔 {file.file.filename} already exists in brain {brain_id}.",  # pyright: ignore reportPrivateUsage=none
             "warning",

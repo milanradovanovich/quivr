@@ -23,10 +23,7 @@ def test_read_main():
 def test_create_and_delete_api_key():
     # First, let's create an API key
     response = client.post(
-        "/api-key",
-        headers={
-            "Authorization": "Bearer " + API_KEY,
-        },
+        "/api-key", headers={"Authorization": f"Bearer {API_KEY}"}
     )
     assert response.status_code == 200
     api_key_info = response.json()
@@ -58,8 +55,7 @@ def test_create_and_delete_api_key():
 def test_retrieve_default_brain():
     # Making a GET request to the /brains/default/ endpoint
     response = client.get(
-        "/brains/default/",
-        headers={"Authorization": "Bearer " + API_KEY},
+        "/brains/default/", headers={"Authorization": f"Bearer {API_KEY}"}
     )
 
     # Assert that the response status code is 200 (HTTP OK)
@@ -92,7 +88,7 @@ def test_create_brain():
     response = client.post(
         "/brains/",
         json=payload,
-        headers={"Authorization": "Bearer " + API_KEY},
+        headers={"Authorization": f"Bearer {API_KEY}"},
     )
 
     # Assert that the response status code is 200 (HTTP OK)
@@ -111,8 +107,7 @@ def test_create_brain():
 def test_retrieve_all_brains():
     # Making a GET request to the /brains/ endpoint to retrieve all brains for the current user
     response = client.get(
-        "/brains/",
-        headers={"Authorization": "Bearer " + API_KEY},
+        "/brains/", headers={"Authorization": f"Bearer {API_KEY}"}
     )
 
     # Assert that the response status code is 200 (HTTP OK)
@@ -128,8 +123,7 @@ def test_retrieve_all_brains():
 def test_delete_all_brains():
     # First, retrieve all brains for the current user
     response = client.get(
-        "/brains/",
-        headers={"Authorization": "Bearer " + API_KEY},
+        "/brains/", headers={"Authorization": f"Bearer {API_KEY}"}
     )
 
     # Assert that the response status code is 200 (HTTP OK)
@@ -144,7 +138,7 @@ def test_delete_all_brains():
         # Send a DELETE request to delete the specific brain
         delete_response = client.delete(
             f"/brains/{brain_id}/",
-            headers={"Authorization": "Bearer " + API_KEY},
+            headers={"Authorization": f"Bearer {API_KEY}"},
         )
 
         # Assert that the DELETE response status code is 200 (HTTP OK)
@@ -157,8 +151,7 @@ def test_delete_all_brains_and_get_default_brain():
 
     # Now, retrieve all brains for the current user
     response = client.get(
-        "/brains/",
-        headers={"Authorization": "Bearer " + API_KEY},
+        "/brains/", headers={"Authorization": f"Bearer {API_KEY}"}
     )
 
     # Assert that the response status code is 200 (HTTP OK)
@@ -169,8 +162,7 @@ def test_delete_all_brains_and_get_default_brain():
 
     # Now, retrieve all brains for the current user
     response = client.get(
-        "/brains/",
-        headers={"Authorization": "Bearer " + API_KEY},
+        "/brains/", headers={"Authorization": f"Bearer {API_KEY}"}
     )
 
     # Assert that the response status code is 200 (HTTP OK)
@@ -179,8 +171,7 @@ def test_delete_all_brains_and_get_default_brain():
 
     # Get the default brain, it should create one if it doesn't exist
     response = client.get(
-        "/brains/default/",
-        headers={"Authorization": "Bearer " + API_KEY},
+        "/brains/default/", headers={"Authorization": f"Bearer {API_KEY}"}
     )
 
     # Assert that the response status code is 200 (HTTP OK)
@@ -189,8 +180,7 @@ def test_delete_all_brains_and_get_default_brain():
 
     # Now, retrieve all brains for the current user
     response = client.get(
-        "/brains/",
-        headers={"Authorization": "Bearer " + API_KEY},
+        "/brains/", headers={"Authorization": f"Bearer {API_KEY}"}
     )
 
     # Assert that there is only one brain
@@ -206,10 +196,7 @@ def test_delete_all_brains_and_get_default_brain():
 
 def test_get_all_chats():
     # Making a GET request to the /chat endpoint to retrieve all chats
-    response = client.get(
-        "/chat",
-        headers={"Authorization": "Bearer " + API_KEY},
-    )
+    response = client.get("/chat", headers={"Authorization": f"Bearer {API_KEY}"})
 
     # Assert that the response status code is 200 (HTTP OK)
     assert response.status_code == 200
@@ -231,17 +218,17 @@ def test_create_chat_and_talk():
     )
 
     brain_response = client.get(
-        "/brains/default", headers={"Authorization": "Bearer " + API_KEY}
+        "/brains/default", headers={"Authorization": f"Bearer {API_KEY}"}
     )
     assert brain_response.status_code == 200
     default_brain_id = brain_response.json()["brain_id"]
-    print("Default brain id: " + default_brain_id)
+    print(f"Default brain id: {default_brain_id}")
 
     # Create a chat
     response = client.post(
         "/chat",
         json={"name": random_chat_name},
-        headers={"Authorization": "Bearer " + API_KEY},
+        headers={"Authorization": f"Bearer {API_KEY}"},
     )
     assert response.status_code == 200
 
@@ -257,7 +244,7 @@ def test_create_chat_and_talk():
             "temperature": "0",
             "max_tokens": "256",
         },
-        headers={"Authorization": "Bearer " + API_KEY},
+        headers={"Authorization": f"Bearer {API_KEY}"},
     )
     assert response.status_code == 200
 
@@ -269,7 +256,7 @@ def test_create_chat_and_talk():
             "temperature": "0",
             "max_tokens": "256",
         },
-        headers={"Authorization": "Bearer " + API_KEY},
+        headers={"Authorization": f"Bearer {API_KEY}"},
     )
     print(response)
     assert response.status_code == 200
@@ -277,7 +264,7 @@ def test_create_chat_and_talk():
     # Now, let's delete the chat
     # Assuming the chat_id is part of the chat_info response. If not, adjust this.
     delete_response = client.delete(
-        "/chat/" + chat_id, headers={"Authorization": "Bearer " + API_KEY}
+        f"/chat/{chat_id}", headers={"Authorization": f"Bearer {API_KEY}"}
     )
     assert delete_response.status_code == 200
 
@@ -285,7 +272,7 @@ def test_create_chat_and_talk():
 def test_explore_with_default_brain():
     # Retrieve the default brain
     brain_response = client.get(
-        "/brains/default", headers={"Authorization": "Bearer " + API_KEY}
+        "/brains/default", headers={"Authorization": f"Bearer {API_KEY}"}
     )
     assert brain_response.status_code == 200
     default_brain_id = brain_response.json()["brain_id"]
@@ -293,7 +280,7 @@ def test_explore_with_default_brain():
     # Now use the default brain_id as parameter in the /explore/ endpoint
     response = client.get(
         f"/explore/{default_brain_id}",
-        headers={"Authorization": "Bearer " + API_KEY},
+        headers={"Authorization": f"Bearer {API_KEY}"},
     )
 
     # Assert that the response status code is 200 (HTTP OK)
@@ -308,7 +295,7 @@ def test_explore_with_default_brain():
 def test_upload_and_delete_file():
     # Retrieve the default brain
     brain_response = client.get(
-        "/brains/default", headers={"Authorization": "Bearer " + API_KEY}
+        "/brains/default", headers={"Authorization": f"Bearer {API_KEY}"}
     )
     assert brain_response.status_code == 200
     default_brain_id = brain_response.json()["brain_id"]
@@ -324,7 +311,7 @@ def test_upload_and_delete_file():
     with open(file_path, "rb") as file:
         upload_response = client.post(
             f"/upload?brain_id={default_brain_id}&enable_summarization={enable_summarization}",
-            headers={"Authorization": "Bearer " + API_KEY},
+            headers={"Authorization": f"Bearer {API_KEY}"},
             files={"uploadFile": file},
         )
 
@@ -338,7 +325,7 @@ def test_upload_and_delete_file():
     # Delete the file
     delete_response = client.delete(
         f"/explore/{file_name}",
-        headers={"Authorization": "Bearer " + API_KEY},
+        headers={"Authorization": f"Bearer {API_KEY}"},
         params={"brain_id": default_brain_id},
     )
 
@@ -353,7 +340,7 @@ def test_upload_and_delete_file():
 def test_upload_explore_and_delete_file():
     # Retrieve the default brain
     brain_response = client.get(
-        "/brains/default", headers={"Authorization": "Bearer " + API_KEY}
+        "/brains/default", headers={"Authorization": f"Bearer {API_KEY}"}
     )
     assert brain_response.status_code == 200
     default_brain_id = brain_response.json()["brain_id"]
@@ -369,7 +356,7 @@ def test_upload_explore_and_delete_file():
     with open(file_path, "rb") as file:
         upload_response = client.post(
             f"/upload?brain_id={default_brain_id}&enable_summarization={enable_summarization}",
-            headers={"Authorization": "Bearer " + API_KEY},
+            headers={"Authorization": f"Bearer {API_KEY}"},
             files={"uploadFile": file},
         )
 
@@ -382,8 +369,7 @@ def test_upload_explore_and_delete_file():
 
     # Explore (Download) the file
     explore_response = client.get(
-        f"/explore/{file_name}",
-        headers={"Authorization": "Bearer " + API_KEY},
+        f"/explore/{file_name}", headers={"Authorization": f"Bearer {API_KEY}"}
     )
 
     # Assert that the explore response status code is 200 (HTTP OK)
@@ -392,7 +378,7 @@ def test_upload_explore_and_delete_file():
     # Delete the file
     delete_response = client.delete(
         f"/explore/{file_name}",
-        headers={"Authorization": "Bearer " + API_KEY},
+        headers={"Authorization": f"Bearer {API_KEY}"},
         params={"brain_id": default_brain_id},
     )
 
@@ -406,7 +392,7 @@ def test_upload_explore_and_delete_file():
 
 def test_get_user_info():
     # Send a request to get user information
-    response = client.get("/user", headers={"Authorization": "Bearer " + API_KEY})
+    response = client.get("/user", headers={"Authorization": f"Bearer {API_KEY}"})
 
     # Assert that the response status code is 200 (HTTP OK)
     assert response.status_code == 200

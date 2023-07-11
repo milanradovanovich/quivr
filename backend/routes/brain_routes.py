@@ -159,8 +159,7 @@ async def create_brain_endpoint(
     brain = Brain(name=brain.name)  # pyright: ignore reportPrivateUsage=none
 
     brain.create_brain()  # pyright: ignore reportPrivateUsage=none
-    default_brain = get_default_user_brain(current_user)
-    if default_brain:
+    if default_brain := get_default_user_brain(current_user):
         logger.info(f"Default brain already exists for user {current_user.id}")
         brain.create_brain_user(  # pyright: ignore reportPrivateUsage=none
             user_id=current_user.id, rights="Owner", default_brain=False

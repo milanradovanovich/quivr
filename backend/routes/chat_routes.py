@@ -45,14 +45,12 @@ def delete_chat_from_db(commons, chat_id):
         ).execute()
     except Exception as e:
         print(e)
-        pass
     try:
         commons["supabase"].table("chats").delete().match(
             {"chat_id": chat_id}
         ).execute()
     except Exception as e:
         print(e)
-        pass
 
 
 def fetch_user_stats(commons, user, date):
@@ -64,8 +62,7 @@ def fetch_user_stats(commons, user, date):
         .filter("date", "eq", date)
         .execute()
     )
-    userItem = next(iter(response.data or []), {"requests_count": 0})
-    return userItem
+    return next(iter(response.data or []), {"requests_count": 0})
 
 
 def check_user_limit(
@@ -76,13 +73,11 @@ def check_user_limit(
         max_requests_number = int(os.getenv("MAX_REQUESTS_NUMBER", 1000))
 
         user.increment_user_request_count(date)
-        if int(user.requests_count) >= int(max_requests_number):
+        if int(user.requests_count) >= max_requests_number:
             raise HTTPException(
                 status_code=429,  # pyright: ignore reportPrivateUsage=none
                 detail="You have reached the maximum number of requests for today.",  # pyright: ignore reportPrivateUsage=none
             )
-    else:
-        pass
 
 
 # get all chats
@@ -195,11 +190,9 @@ async def create_question_handler(
                 user_openai_api_key=current_user.user_openai_api_key,  # pyright: ignore reportPrivateUsage=none
             )
 
-        chat_answer = gpt_answer_generator.generate_answer(  # pyright: ignore reportPrivateUsage=none
+        return gpt_answer_generator.generate_answer(  # pyright: ignore reportPrivateUsage=none
             chat_question.question
         )
-
-        return chat_answer
     except HTTPException as e:
         raise e
 

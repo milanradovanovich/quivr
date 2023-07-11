@@ -13,7 +13,7 @@ MAX_BRAIN_SIZE_WITH_OWN_KEY = int(os.getenv("MAX_BRAIN_SIZE_WITH_KEY", 209715200
 
 def get_unique_documents(vectors):
     # Convert each dictionary to a tuple of items, then to a set to remove duplicates, and then back to a dictionary
-    return [dict(t) for t in set(tuple(d.items()) for d in vectors)]
+    return [dict(t) for t in {tuple(d.items()) for d in vectors}]
 
 
 @user_router.get("/user", dependencies=[Depends(AuthBearer())], tags=["User"])
@@ -39,9 +39,7 @@ async def get_user_endpoint(
     date = time.strftime("%Y%m%d")
     max_requests_number = os.getenv("MAX_REQUESTS_NUMBER")
     requests_stats = current_user.get_user_request_stats()
-    default_brain = get_default_user_brain(current_user)
-
-    if default_brain:
+    if default_brain := get_default_user_brain(current_user):
         defaul_brain_size = Brain(id=default_brain["id"]).brain_size
     else:
         defaul_brain_size = 0

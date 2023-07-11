@@ -157,14 +157,11 @@ class OpenAIBrainPicking(BaseBrainPicking):
 
         answer = model_response["answer"]
 
-        # Update chat history
-        chat_answer = update_chat_history(
+        return update_chat_history(
             chat_id=self.chat_id,
             user_message=question,
             assistant=answer,
         )
-
-        return chat_answer
 
     async def _acall_chain(self, chain, question, history):
         """

@@ -38,10 +38,7 @@ class BaseBrainPicking(BaseModel):
 
     def _determine_api_key(self, openai_api_key, user_openai_api_key):
         """If user provided an API key, use it."""
-        if user_openai_api_key is not None:
-            return user_openai_api_key
-        else:
-            return openai_api_key
+        return openai_api_key if user_openai_api_key is None else user_openai_api_key
 
     def _determine_streaming(self, model: str, streaming: bool) -> bool:
         """If the model name allows for streaming and streaming is declared, set streaming to True."""
@@ -51,9 +48,7 @@ class BaseBrainPicking(BaseModel):
             logger.warning(
                 f"Streaming is not compatible with {model}. Streaming will be set to False."
             )
-            return False
-        else:
-            return False
+        return False
 
     def _determine_callback_array(
         self, streaming

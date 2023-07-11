@@ -20,12 +20,9 @@ async def process_github(
 ):
     random_dir_name = os.urandom(16).hex()
     dateshort = time.strftime("%Y%m%d")
-    loader = GitLoader(
-        clone_url=repo,
-        repo_path="/tmp/" + random_dir_name,
-    )
+    loader = GitLoader(clone_url=repo, repo_path=f"/tmp/{random_dir_name}")
     documents = loader.load()
-    os.system("rm -rf /tmp/" + random_dir_name)
+    os.system(f"rm -rf /tmp/{random_dir_name}")
 
     chunk_size = 500
     chunk_overlap = 0

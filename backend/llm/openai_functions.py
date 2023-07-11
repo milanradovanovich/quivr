@@ -59,7 +59,7 @@ class OpenAIFunctionsBrainPicking(BaseBrainPicking):
             max_tokens=max_tokens,
             user_openai_api_key=user_openai_api_key,
             temperature=temperature,
-            brain_id=str(brain_id),
+            brain_id=brain_id,
             streaming=False,
         )
 
@@ -218,11 +218,8 @@ class OpenAIFunctionsBrainPicking(BaseBrainPicking):
             )
             formatted_response = format_answer(response)
 
-        # Update chat history
-        chat_history = update_chat_history(
+        return update_chat_history(
             chat_id=self.chat_id,
             user_message=question,
             assistant=formatted_response.content or "",
         )
-
-        return chat_history
